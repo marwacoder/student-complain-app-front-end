@@ -1,0 +1,26 @@
+.complain-container {
+    padding: 0 20px;
+    padding-top: 60px;
+    padding-bottom: 65px;
+    
+}
+
+.pop-over-form{
+    width: 410px;
+    
+}
+
+.student-pop-over {
+    position: fixed;
+    transform: translate(-15%, -8%);
+}
+@media screen and (min-width: 300px) and (max-width: 500px) {
+    .pop-over-form{
+        width: 300px;
+    }
+    .student-pop-over{
+        position: fixed;
+        transform: translate(0%, -0%);
+        
+    }
+}

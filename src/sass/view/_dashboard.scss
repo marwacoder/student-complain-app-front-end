@@ -1,0 +1,17 @@
+#app-bar {
+    background-color: $color-white;
+    &-title {
+        color: $color-primary;
+    }
+}
+
+#drawer-paper {
+    background-color: $color-primary;
+}
+
+.business-name {
+  margin-top: -45px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold; 
+}

@@ -1,0 +1,242 @@
+.welcome-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 25%;
+    // height: 68%;
+    transform: translate(-50%, -50%);
+
+}
+
+.welcome {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: $color-secondary;
+}
+
+.auth-container {
+    padding: 0 20px;
+    padding-top: 160px;
+    padding-bottom: 65px;
+    
+   
+}
+
+.text-field {
+    padding-bottom: 3px;
+    .input {
+     width: 100%;
+     padding-bottom: 5px;
+}
+}
+.outlinedInput-input-488 {
+    border-color: red;
+}
+ .btn {
+    width: 100%;
+    margin-top: 40px;
+}
+
+.logo {
+    height: 100px;
+    width: 100px;
+}
+
+.instuction:nth-child(1) {
+    
+    font-size: 13px;
+    padding: 10px 0;
+}
+
+.Logo {
+    position: fixed;
+    top: 14%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-bottom: -20px;
+}
+
+.item--2 {
+    padding-bottom: 10px;
+}
+.btn {
+    height: 35px;
+}
+
+.item--3 {
+    font-weight: bold;
+    padding-top: 10px;
+}
+.item--4 {
+    text-align: center;
+    font-size: 13px;
+    padding-top: 10px;
+    &:not(span){
+        color: grey;
+    }
+    #forgot {
+        color: $color-primary;
+        text-align: left;
+        cursor: pointer;
+    }
+    #quick{
+        font-size: 14px;
+        padding-top: 10px;
+        padding-bottom: -40px;
+    }
+
+}
+
+.forgot {
+    padding: 40px 20px;
+    padding-top: 60px;
+}
+
+#terms {
+    color: $color-primary;
+}
+.social-media {
+    position: absolute;
+    top: 93%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    &-facebook, &-google, &-twitter, &-instagram {
+        height: 30px;
+        
+    }
+    div {
+         display: inline-block;
+         padding: 5px;
+         cursor: pointer;
+    }
+}
+
+.tabs {
+    position: fixed;
+    top: 28%;
+    left: 50%;
+    //text-align: center;
+    
+    transform: translate(-50%, -50%);
+    .register, .sign-in {
+         display: inline-block;
+         text-transform: uppercase;
+         font-weight: bold;
+         padding: 10px;
+         font-size: 12px;
+         
+         
+         &:active {
+             transform: translate(-1px);
+             box-shadow: 0 5px 10px rgba($color-black, .5);
+             transition: all .5s;
+             
+         }
+    }
+    
+}
+
+
+.switch {
+    border-bottom: 2px solid $color-secondary;
+    color: $color-secondary;
+    
+}
+@media screen and (min-width: 300px) and (max-width: 500px) {
+    #visibility {
+        width: 60px;
+    }
+    .tabs {
+        .register, .sign-in {
+        font-size: 10px;
+    }
+    }
+    
+.logo {
+    height: 30px;
+}
+.btn {
+    height: 30px;
+}
+.item--3 {
+    font-size: 10px;
+    // #btn {
+    //     font-weight: bold;
+    //     color: $color-primary;
+    // }
+}
+.social-media {
+    &-facebook, &-google, &-twitter, &-instagram {
+        height: 20px;
+        
+    }
+}
+
+.item--4 {
+    font-size: 10px;
+    #quick {
+        font-size: 10px;
+    }
+}
+
+.welcome-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85%;
+    transform: translate(-50%, -50%);
+
+}
+}
+
+@media screen and (max-width: 700px) {
+
+.tabs {
+        .register, .sign-in {
+        font-size: 12px;
+    }
+    }
+.logo {
+    height: 55px;
+}
+.btn {
+    height: 35px;
+}
+.item--3 {
+    font-size: 12px;
+    // #btn {
+    //     font-weight: bold;
+    //     color: $color-primary;
+    // }
+}
+.social-media {
+    &-facebook, &-google, &-twitter, &-instagram {
+        height: 25px;
+        
+    }
+}
+
+.item--4 {
+    font-size: 12px;
+    #quick {
+        font-size: 12px;
+    }
+    
+}
+
+.welcome-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85%;
+    transform: translate(-50%, -50%);
+
+}
+
+}
