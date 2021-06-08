@@ -51,7 +51,7 @@ const Lecturer = Loadable ({
 });
 
 const StudenT = Loadable ({
-    loader: () => import('../view/staff/student'),
+    loader: () => import('../view/staff/StudentHome'),
     loading:()=> <Spinner {...styleProps} />,
 });
 

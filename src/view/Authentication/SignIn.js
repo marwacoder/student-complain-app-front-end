@@ -149,6 +149,7 @@ class SignIn extends Component {
                             disabled={isLoading}
                             isLoading={isLoading}
                             className="btn auth-btn"
+                            type='submit'
                             variant={'contained'}
                             buttonName={'SIGN IN'}
                             

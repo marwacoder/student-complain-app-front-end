@@ -551,12 +551,10 @@ export const postStudentRefresh = () => {
     };
 };
 
-export const postStudent = ({studentId, name, gender, email,phoneNumber, level, password, role}) => {
+export const postStudent = (items) => {
     return (dispatch) => {
         dispatch(postStudentStart());
-        axios.post('http://localhost:8000/dcs.abu.edu.ng/student/create', {
-            studentId, name, gender, email,phoneNumber,level, password, role
-        }).then(resp => {
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/student/create',{items}).then(resp => {
             
             dispatch(postStudentSuccess(resp.data))
             

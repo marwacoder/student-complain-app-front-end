@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import {Card, MenuItem} from '../../mui'
+import { Card, MenuItem } from '../../mui'
+import {Box} from '@material-ui/core'
 import Input from '../../helpers/components/Input/Input'
 import checkValidity from '../../helpers/validation/inputValidation'
 import Button from '../../helpers/components/Button/Button'
@@ -132,7 +133,9 @@ class Account extends Component {
         const {controls} = this.state
         let role = 'Student'
         event.preventDefault()
-        this.props.onCreateAccount({
+    
+        this.props.onCreateAccount(
+            [{
             studentId: controls.studentId.value,
             name: controls.name.value,
             gender: controls.gender.value,
@@ -141,7 +144,7 @@ class Account extends Component {
             level: controls.level.value,
             password: controls.password.value,
             role
-            }
+        }]
         );
     }
     inputChangedHandler = (event, inputIdentifier) => {
@@ -169,7 +172,7 @@ class Account extends Component {
         }
         return (
             <div>
-                 <div className="account-container">
+                 <div >
                 
                 <Card>  
                     <div className="form-container">
@@ -207,10 +210,12 @@ class Account extends Component {
                             disabled={isLoading}
                             isLoading={isLoading}
                             className="btn auth-btn"
-                            variant={'outlined'}
-                            buttonName={'CREATE ACCOUNT'}
+                                        variant={'outlined'}
+                                        type="submit"
+                            buttonName={'CREATE Student'}
                         />
-                    </div>
+                                </div>
+                                 
                 </form>
 
                             </div> 

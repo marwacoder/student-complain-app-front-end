@@ -7,11 +7,12 @@ const button = (props) => {
         <Button
             disableRipple={props.disableRipple}
             disableFocusRipple={props.disableFocusRipple}
-            disabled={props.disabled || props.valid ===false }
+            disabled={props.disabled || props.valid === false}
             type='submit'
             variant={props.variant}
             style={{ backgroundColor: '#19A15F', color: 'white', fontSize: 14 }}
             fullWidth
+            onClick={ props.clicked}
         ><span>{props.isLoading ? <Loader type="ThreeDots" 
                 color="#f4f4f4"
                 height={10}
