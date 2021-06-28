@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import routes from '../routes'
-import {userLogout} from '../../store/actions'
+import { userLogout } from '../../store/actions'
 import { withStyles } from '@material-ui/core/styles'
-import {Route, Switch, } from 'react-router-dom'
+import { Route, Switch, } from 'react-router-dom'
 import {
-    List, ListItem, Toolbar, AppBar,ViewList,
-    CssBaseline, IconButton, HomeWorkIcon,Pages,NewReleases,
+    List, ListItem, Toolbar, AppBar, ViewList,
+    CssBaseline, IconButton, HomeWorkIcon, Pages, NewReleases,
     ListItemText, ListItemIcon, MenuItem, Menu, Icon, Avatar,
-    Collapse, Hidden, Divider, Typography,History,SchoolIcon,
-    ExpandLess, ExpandMore, DashboardIcon,Settings,
+    Collapse, Hidden, Divider, Typography, History, SchoolIcon,
+    ExpandLess, ExpandMore, DashboardIcon, Settings,
     MenuIcon, Drawer, AccountCircle
 } from '../../mui'
 import { styles } from './style'
-import {Colors} from '../../styles/themes'
+import { Colors } from '../../styles/themes'
 import { ExitToApp } from '@material-ui/icons';
 
 
@@ -31,22 +31,22 @@ class DefaultLayout extends Component {
             prevNest: '',
             anchorEl: null,
             anchorEll: null,
-            
+
         }
     }
     componentDidMount() {
         // const {  token } = this.props.authState
         // if (token === null )
         //     return this.props.history.push('/auth');
-       
-}
-    handleProfileMenuOpen = event => {
-    this.setState({ anchorEll: event.currentTarget });
-  };
 
-  handleClose = () => {
-    this.setState({ anchorEll: null });
-  };
+    }
+    handleProfileMenuOpen = event => {
+        this.setState({ anchorEll: event.currentTarget });
+    };
+
+    handleClose = () => {
+        this.setState({ anchorEll: null });
+    };
 
     handleDrawerToggle = () => {
         this.setState(prevState => ({ mobileOpen: !prevState.mobileOpen }))
@@ -65,70 +65,70 @@ class DefaultLayout extends Component {
     render() {
         const { isLoggedIn, data } = this.props.authState
         const student = [
-           
+
             {
-                name: "Result Complain", icon:  <Pages />, children: [
-                   { name: "New Complain",icon: <NewReleases/>, link: "/student" },
-                    
-                   
+                name: "Result Complain", icon: <Pages />, children: [
+                    { name: "New Complain", icon: <NewReleases />, link: "/student" },
+
+
                 ]
             },
         ];
         const exlec = [
             {
-                name: "View Complain", icon:  <ViewList />, children: [
-                   { name: "View Complain", link: "/staff" },
-                    { name: "Complain History", icon: <History/>, link: "/history" },
-                    
-                   
+                name: "View Complain", icon: <ViewList />, children: [
+                    { name: "View Complain", link: "/staff" },
+                    { name: "Complain History", icon: <History />, link: "/history" },
+
+
                 ]
             },
-            
+
         ]
-        const admin = [ {
-               name: "Settings", icon: <Settings />, children: [
-                   { name: "Examiner", icon: <SchoolIcon/>, link: '/examiner' },
-                   { name: "Lecturer", icon: <SchoolIcon/>  , link: '/lecturer'},
-                   { name: "Student", icon: <SchoolIcon />, link: '/studentT' },
-                     { name: "Course" ,icon: <SchoolIcon/> , link: '/course'},
-                    
-                   
-                ]
-            },]
+        const admin = [{
+            name: "Settings", icon: <Settings />, children: [
+                { name: "Examiner", icon: <SchoolIcon />, link: '/examiner' },
+                { name: "Lecturer", icon: <SchoolIcon />, link: '/lecturer' },
+                { name: "Student", icon: <SchoolIcon />, link: '/studentT' },
+                { name: "Course", icon: <SchoolIcon />, link: '/course' },
+
+
+            ]
+        },]
         const set = [
             {
-               name: "My Profile", icon: <AccountCircle />, link: '/profile'
-           },
+                name: "My Profile", icon: <AccountCircle />, link: '/profile'
+            },
             {
-               name: "Logout", icon: <ExitToApp />
-           },
+                name: "Logout", icon: <ExitToApp />
+            },
         ]
         let authRedirect = null;
-        if (isLoggedIn === false ) {
-            authRedirect = <Redirect to ='/auth'/>
+        if (isLoggedIn === false) {
+            authRedirect = <Redirect to='/auth' />
         }
         const { classes, container, location, } = this.props
-        const {openNest, anchorEll} = this.state
-        
+        const { openNest, anchorEll } = this.state
+
         const drawer = (
             <div>
-                
+
                 <div className={classes.toolbar} />
                 <div className="business-name">
                     <HomeWorkIcon
-                    style={{fontSize: 40}}
-                   />
+                        style={{ fontSize: 40 }}
+                    />
                 </div>
                 <Divider color='inherit' />
-                {data[0].role === 'Admin' && <List>
-                     
-                    <ListItem button className={"sidebarBtn"} style={{'&:focus': { outline: "none" }}} onClick={()=> this.props.history.push('/dashboard')} selected={location.pathname === '/dashboard'}>
+                {data && data[0].role === 'Admin' && <List>
+
+                    <ListItem button className={"sidebarBtn"} style={{ '&:focus': { outline: "none" } }} onClick={() => this.props.history.push('/dashboard')} selected={location.pathname === '/dashboard'}>
                         <ListItemIcon style={{ color: "#fff", margin: 0 }}><DashboardIcon /></ListItemIcon>
                         <ListItemText classes={{ primary: classes.sidebarText }}>DASHBOARD</ListItemText>
-                  </ListItem>  
+                    </ListItem>
                 </List>}
                 <List >
-                    {data[0].role === 'Lecturer' || data[0].role === 'Examiner' ? exlec.map((item, index) => {
+                    {data && data[0].role === 'Lecturer' || data[0].role === 'Examiner' ? exlec.map((item, index) => {
                         return <>
                             <ListItem button className={"sidebarBtn"} style={{ '&:focus': { outline: "none" } }} onClick={item.name === 'Logout' ? () => this.props.onLogout() : () => this.handleClick(item, index)} selected={location.pathname === item.link} >
                                 <ListItemIcon style={{ color: "#fff", margin: 0 }}>{item.icon}</ListItemIcon>
@@ -148,7 +148,7 @@ class DefaultLayout extends Component {
                                 </List>
                             </Collapse>
                         </>
-                    }) : data[0].role === 'Student' ? student.map((item, index) => {
+                    }) : data && data[0].role === 'Student' ? student.map((item, index) => {
                         return <>
                             <ListItem button className={"sidebarBtn"} style={{ '&:focus': { outline: "none" } }} onClick={item.name === 'Logout' ? () => this.props.onLogout() : () => this.handleClick(item, index)} selected={location.pathname === item.link} >
                                 <ListItemIcon style={{ color: "#fff", margin: 0 }}>{item.icon}</ListItemIcon>
@@ -189,35 +189,35 @@ class DefaultLayout extends Component {
                             </Collapse>
                         </>
                     })}
-                    
-                    <Collapse  timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                    
-                                            <ListItem  button className={classes.nested}   >
-                                                <ListItemIcon style={{ color: "#fff", margin: 0 }}></ListItemIcon>
-                                                <ListItemText   classes={{ primary: classes.sidebarText }} />
-                                            </ListItem>
-                                    
-                                </List>
-                            </Collapse>
+
+                    <Collapse timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+
+                            <ListItem button className={classes.nested}   >
+                                <ListItemIcon style={{ color: "#fff", margin: 0 }}></ListItemIcon>
+                                <ListItemText classes={{ primary: classes.sidebarText }} />
+                            </ListItem>
+
+                        </List>
+                    </Collapse>
                 </List>
-                
+
                 {authRedirect}
                 {/* <div style={{paddingTop: 50}}>
                     <Settings style={{color: '#fff'}}/>
                 </div> */}
-                   <List style={{marginTop: "85%"}}>
+                <List style={{ marginTop: "85%" }}>
                     {set.map((item, index) => {
                         return <>
-                        <ListItem button className= "sidebarBtn" style={{ '&:focus': { outline: "none" } }} onClick={item.name === 'Logout' ? () => this.props.onLogout() : () => this.handleClick(item, index)} selected={location.pathname === item.link} >
-                            <ListItemIcon style={{ color: "#fff", margin: 0 }}>{item.icon}</ListItemIcon>
-                            <ListItemText primary={item.name} classes={{ primary: classes.sidebarText }} />
-                            {item.children ? <ListItemIcon className={classes.nestedIcon}>{openNest === index ? <ExpandLess /> : <ExpandMore />}</ListItemIcon> : null}
+                            <ListItem button className="sidebarBtn" style={{ '&:focus': { outline: "none" } }} onClick={item.name === 'Logout' ? () => this.props.onLogout() : () => this.handleClick(item, index)} selected={location.pathname === item.link} >
+                                <ListItemIcon style={{ color: "#fff", margin: 0 }}>{item.icon}</ListItemIcon>
+                                <ListItemText primary={item.name} classes={{ primary: classes.sidebarText }} />
+                                {item.children ? <ListItemIcon className={classes.nestedIcon}>{openNest === index ? <ExpandLess /> : <ExpandMore />}</ListItemIcon> : null}
                             </ListItem>
-                            </>
+                        </>
                     })}
-                </List> 
-           </div>
+                </List>
+            </div>
         );
         return (
             <div className={classes.root}>
@@ -236,32 +236,32 @@ class DefaultLayout extends Component {
                         <Typography id="app-bar-title" variant="h6" noWrap>
                             STUDENT RESULT COMPLAIN SYSTEM
           </Typography>
-                       
-                        
-          <Menu
-            id="material-appbar"
-            anchorEl={anchorEll}
-            open={Boolean(anchorEll)}
-            onClose={this.handleClose}
-            style={{ marginTop: 35 }}
-            classes={{ paper: classes.menu }}
-          >
-            <MenuItem >
-              <Icon color="primary" style={{ marginRight: 10 }}>
-                account_circle_outlined
+
+
+                        <Menu
+                            id="material-appbar"
+                            anchorEl={anchorEll}
+                            open={Boolean(anchorEll)}
+                            onClose={this.handleClose}
+                            style={{ marginTop: 35 }}
+                            classes={{ paper: classes.menu }}
+                        >
+                            <MenuItem >
+                                <Icon color="primary" style={{ marginRight: 10 }}>
+                                    account_circle_outlined
               </Icon>
               Create Account
             </MenuItem>
-            {/* <MenuItem onClick={this.handleClose}><Icon style={{color:"#388e3c", marginRight:10}} >people</Icon>Accounts
+                            {/* <MenuItem onClick={this.handleClose}><Icon style={{color:"#388e3c", marginRight:10}} >people</Icon>Accounts
                     </MenuItem> */}
-            <Divider />
-            <MenuItem >
-              <Icon style={{ color: '#b71c1c', marginRight: 10 }}>
-                exit_to_app
+                            <Divider />
+                            <MenuItem >
+                                <Icon style={{ color: '#b71c1c', marginRight: 10 }}>
+                                    exit_to_app
               </Icon>
               Logout
             </MenuItem>
-          </Menu>
+                        </Menu>
 
                     </Toolbar>
                 </AppBar>
@@ -269,7 +269,7 @@ class DefaultLayout extends Component {
                     {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                     <Hidden smUp implementation="css">
                         <Drawer
-                            
+
                             container={container}
                             variant="temporary"
                             anchor={'left'}
@@ -316,18 +316,18 @@ class DefaultLayout extends Component {
 
 const mapStateToProps = (state) => {
     return {
-      authState:state.isAuthenticated,
+        authState: state.isAuthenticated,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogout:()=> dispatch(userLogout())
+        onLogout: () => dispatch(userLogout())
     }
 }
 DefaultLayout.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)((withStyles(styles, { withTheme: true })(DefaultLayout)));
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, { withTheme: true })(DefaultLayout)));
 

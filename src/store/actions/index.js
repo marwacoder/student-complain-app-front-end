@@ -4,9 +4,9 @@ import setAuthToken from '../../API'
 import * as actionTypes from './actionTypes';
 import * as api from '../../helpers/API'
 
-import {API} from '../constant'
+import { API } from '../constant'
 
-const { ERROR_MESSAGE} = API
+const { ERROR_MESSAGE } = API
 export const history = createBrowserHistory()
 
 
@@ -46,51 +46,51 @@ export const logout = () => {
 export const checkAuthTimeOut = (expirationTime) => {
     return dispatch => {
         setTimeout(() => {
-            dispatch(userLogout());   
-        },expirationTime * 1000)
+            dispatch(userLogout());
+        }, expirationTime * 1000)
     }
 }
 //LOGIN
 export const auth = (username, password) => {
- 
+
     return (dispatch) => {
         dispatch(authStart());
-        api.login({username, password}).then(resp => {
+        api.login({ username, password }).then(resp => {
             setTimeout(() => {
                 dispatch(authSuccess(resp.data))
                 dispatch(checkAuthTimeOut(resp.data.expiresIn))
                 const token = resp.data.token;
                 sessionStorage.setItem('user-token', token);
                 setAuthToken(token)
-            },2000)
+            }, 2000)
         }).catch(err => {
-           
-                dispatch(authFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE)) 
-      })
+
+            dispatch(authFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
 export const isSessionActive = () => {
-  let token;
-  try {
-    token = sessionStorage.getItem("user-token");
-  } catch (error) {
-    return false;
-  }
-  return Boolean(token);
+    let token;
+    try {
+        token = sessionStorage.getItem("user-token");
+    } catch (error) {
+        return false;
+    }
+    return Boolean(token);
 };
 
 export const clearSession = () => {
-  try {
-    sessionStorage.removeItem("user-token");
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        sessionStorage.removeItem("user-token");
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 export const userLogout = () => (dispatch) => {
-    dispatch(logout()); 
-     clearSession();
+    dispatch(logout());
+    clearSession();
 };
 
 //SEND COMPLAIN ACTION
@@ -153,16 +153,16 @@ export const getUserProfileRefresh = () => {
 
 
 export const getUserProfile = ({ role, studentId }) => {
-        return (dispatch) => {
+    return (dispatch) => {
         dispatch(getUserProfileStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/student/'+ studentId).then(resp => {
+        axios.get('http://localhost:8000/dcs.abu.edu.ng/student/' + studentId).then(resp => {
             dispatch(getUserProfileSuccess(resp.data))
         }).catch(err => {
-            dispatch(getUserProfileFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
-   };
-    
-   
+            dispatch(getUserProfileFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
+    };
+
+
 };
 
 export const amendUserProfileStart = () => {
@@ -194,17 +194,17 @@ export const amendUserProfileRefresh = () => {
 
 
 
-export const amendUserProfile = ({id, phoneNumber, email, password}) => {
-        return (dispatch) => {
+export const amendUserProfile = ({ id, phoneNumber, email, password }) => {
+    return (dispatch) => {
         dispatch(amendUserProfileStart());
-            axios.post('http://localhost:8000/dcs.abu.edu.ng/user/amend/' + id, {
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/user/amend/' + id, {
             phoneNumber, email, password
         }).then(resp => {
             dispatch(amendUserProfileSuccess(resp.data))
         }).catch(err => {
-            dispatch(amendUserProfileFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
-   }; 
+            dispatch(amendUserProfileFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
+    };
 };
 
 //CREATE ACCOUNT ACTION
@@ -237,15 +237,15 @@ export const createAccountRefresh = () => {
 export const register = (user_id, name, gender, level, email, phone, password, role) => {
     return (dispatch) => {
         dispatch(createAccountStart());
-        axios.post( 'http://localhost:8000/dcs.abu.edu.ng/user/register',
-        {user_id, name, gender, level, email, phone, password, role}).then(resp => {
-            setTimeout(() => {
-                dispatch(createAccountSuccess(resp.data.meta))
-            },3000)
-        }).catch(err => {
-        dispatch(createAccountFail(err.response !== undefined ? err.response.data.meta.message: ERROR_MESSAGE.NETWORK_FAILURE))  
-    console.log(err.response,'acc')
-      })
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/user/register',
+            { user_id, name, gender, level, email, phone, password, role }).then(resp => {
+                setTimeout(() => {
+                    dispatch(createAccountSuccess(resp.data.meta))
+                }, 3000)
+            }).catch(err => {
+                dispatch(createAccountFail(err.response !== undefined ? err.response.data.meta.message : ERROR_MESSAGE.NETWORK_FAILURE))
+                console.log(err.response, 'acc')
+            })
     };
 };
 
@@ -274,22 +274,28 @@ export const getHistoryFail = (payload) => {
 export const getHistory = (role, lecturerId) => {
     if (role === 'Examiner') {
         return (dispatch) => {
-        dispatch(getHistoryStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/examinerInbox').then(resp => {
-            dispatch(getHistorySuccess(resp.data))
-        }).catch(err => {
-            dispatch(getHistoryFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
-        })
-    };
+            dispatch(getHistoryStart());
+            axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/examinerInbox').then(resp => {
+                setTimeout(() => {
+                    dispatch(getHistorySuccess(resp.data))
+                }, 2000)
+
+            }).catch(err => {
+                dispatch(getHistoryFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     } else {
-       return (dispatch) => {
-        dispatch(getHistoryStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/lecturerInbox/'+ lecturerId).then(resp => {
-            dispatch(getHistorySuccess(resp.data))
-        }).catch(err => {
-            dispatch(getHistoryFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
-        })
-    }; 
+        return (dispatch) => {
+            dispatch(getHistoryStart());
+            axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/lecturerInbox/' + lecturerId).then(resp => {
+                setTimeout(() => {
+                    dispatch(getHistorySuccess(resp.data))
+                }, 2000)
+
+            }).catch(err => {
+                dispatch(getHistoryFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     }
 };
 
@@ -320,33 +326,33 @@ export const getCommentFail = (payload) => {
 
 
 
-export const getComment = ({id, role}) => {
+export const getComment = ({ id, role }) => {
     if (role === 'Admin') {
         return (dispatch) => {
-        dispatch(getCommentStart());
-         axios.all([axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show3/`), axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show4/`)]).then(axios.spread((...response) => {
-             let res1 = response[0].data.mails;
-             let res2 = response[1].data.mails;
-            const combined = [].concat(res1, res2)
-           dispatch(getCommentSuccess(combined))
-       })).catch(err => {
-            dispatch(getCommentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-        })
-    };
-    } else{
+            dispatch(getCommentStart());
+            axios.all([axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show3/`), axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show4/`)]).then(axios.spread((...response) => {
+                let res1 = response[0].data.mails;
+                let res2 = response[1].data.mails;
+                const combined = [].concat(res1, res2)
+                dispatch(getCommentSuccess(combined))
+            })).catch(err => {
+                dispatch(getCommentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
+    } else {
         return (dispatch) => {
-        dispatch(getCommentStart());
-         axios.all([axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show1/`+ id), axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show2/`+ id)]).then(axios.spread((...response) => {
-             let res1 = response[0].data.mails;
-             let res2 = response[1].data.mails;
-            const combined = [].concat(res1, res2)
-           dispatch(getCommentSuccess(combined))
-       })).catch(err => {
-            dispatch(getCommentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-        })
-    };
+            dispatch(getCommentStart());
+            axios.all([axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show1/` + id), axios.get(`http://localhost:8000/dcs.abu.edu.ng/mail/show2/` + id)]).then(axios.spread((...response) => {
+                let res1 = response[0].data.mails;
+                let res2 = response[1].data.mails;
+                const combined = [].concat(res1, res2)
+                dispatch(getCommentSuccess(combined))
+            })).catch(err => {
+                dispatch(getCommentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     }
-     
+
 };
 
 
@@ -377,19 +383,19 @@ export const deleteCommentRefresh = () => {
     };
 };
 
-export const deleteComment = ({studentId, emailId}) => {
+export const deleteComment = ({ studentId, emailId }) => {
     return (dispatch) => {
         dispatch(deleteCommentStart());
-        axios.post( 'http://localhost:8000/dcs.abu.edu.ng/mail/destroy/'+ emailId).then(resp => {
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/destroy/' + emailId).then(resp => {
             setTimeout(() => {
                 dispatch(deleteCommentSuccess(resp.data))
                 if (resp.data)
                     return dispatch(getComment(studentId))
             })
         }).catch(err => {
-            console.log(err.response, )
-            dispatch(deleteCommentFail(err.response !== undefined ? err.response.data.error: ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
+            console.log(err.response,)
+            dispatch(deleteCommentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
@@ -404,7 +410,7 @@ export const deleteEmailStart = () => {
 export const deleteEmailSuccess = (payload) => {
     return {
         type: actionTypes.DELETE_EMAIL_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -421,19 +427,19 @@ export const deleteEmailRefresh = () => {
     };
 };
 
-export const deleteEmail = ({role, lecturerId, emailId}) => {
+export const deleteEmail = ({ role, lecturerId, emailId }) => {
     return (dispatch) => {
         dispatch(deleteCommentStart());
-        axios.post( 'http://localhost:8000/dcs.abu.edu.ng/mail/destroy1/'+ emailId).then(resp => {
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/destroy1/' + emailId).then(resp => {
             setTimeout(() => {
                 dispatch(deleteCommentSuccess(resp.data))
                 if (resp.data)
                     return dispatch(getHistory(role, lecturerId))
             })
         }).catch(err => {
-            console.log(err.response, )
-            dispatch(deleteCommentFail(err.response !== undefined ? err.response.data.error: ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
+            console.log(err.response,)
+            dispatch(deleteCommentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
@@ -449,7 +455,7 @@ export const postExaminerStart = () => {
 export const postExaminerSuccess = (payload) => {
     return {
         type: actionTypes.POST_EXAMINER_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -466,19 +472,19 @@ export const postExaminerRefresh = () => {
     };
 };
 
-export const postExaminer = ({examinerId, name, gender, email,phoneNumber, password, role}) => {
+export const postExaminer = ({ examinerId, name, gender, email, phoneNumber, password, role }) => {
     return (dispatch) => {
         dispatch(postExaminerStart());
         axios.post('http://localhost:8000/dcs.abu.edu.ng/examiner/create', {
-            examinerId, name, gender, email,phoneNumber, password, role
+            examinerId, name, gender, email, phoneNumber, password, role
         }).then(resp => {
-            
+
             dispatch(postExaminerSuccess(resp.data))
-            
-        
+
+
         }).catch(err => {
-            dispatch(postExaminerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
+            dispatch(postExaminerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
@@ -493,7 +499,7 @@ export const getExaminerStart = () => {
 export const getExaminerSuccess = (payload) => {
     return {
         type: actionTypes.GET_EXAMINER_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -514,13 +520,13 @@ export const getExaminer = () => {
     return (dispatch) => {
         dispatch(getExaminerStart());
         axios.get('http://localhost:8000/dcs.abu.edu.ng/examiner/examiners/getAll').then(resp => {
-            
+
             dispatch(getExaminerSuccess(resp.data))
-            
-        
+
+
         }).catch(err => {
-            dispatch(getExaminerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
+            dispatch(getExaminerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
@@ -534,7 +540,7 @@ export const postStudentStart = () => {
 export const postStudentSuccess = (payload) => {
     return {
         type: actionTypes.POST_STUDENT_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -554,14 +560,14 @@ export const postStudentRefresh = () => {
 export const postStudent = (items) => {
     return (dispatch) => {
         dispatch(postStudentStart());
-        axios.post('http://localhost:8000/dcs.abu.edu.ng/student/create',{items}).then(resp => {
-            
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/student/create', { items }).then(resp => {
+
             dispatch(postStudentSuccess(resp.data))
-            
-        
+
+
         }).catch(err => {
-            dispatch(postStudentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
+            dispatch(postStudentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
@@ -576,7 +582,7 @@ export const postLecturerStart = () => {
 export const postLecturerSuccess = (payload) => {
     return {
         type: actionTypes.POST_LECTURER_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -593,19 +599,19 @@ export const postLecturerRefresh = () => {
     };
 };
 
-export const postLecturer = ({lecturerId, name, gender, email,phoneNumber, password, role, courseId}) => {
+export const postLecturer = ({ lecturerId, name, gender, email, phoneNumber, password, role, courseId }) => {
     return (dispatch) => {
         dispatch(postLecturerStart());
         axios.post('http://localhost:8000/dcs.abu.edu.ng/lecturer/create', {
-            lecturerId, name, gender, email,phoneNumber, password, role, courseId
+            lecturerId, name, gender, email, phoneNumber, password, role, courseId
         }).then(resp => {
-            
+
             dispatch(postLecturerSuccess(resp.data))
-            
-        
+
+
         }).catch(err => {
-            dispatch(postLecturerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
+            dispatch(postLecturerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+        })
     };
 };
 
@@ -619,7 +625,7 @@ export const studentToExaminerStart = () => {
 export const studentToExaminerSuccess = (payload) => {
     return {
         type: actionTypes.STUDENT_TO_EXAMINER_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -638,37 +644,37 @@ export const studentToExaminerRefresh = () => {
 
 export const studentToExaminerOrLecturer = ({ complainType, message, from, to, studentId, courseId, lecturerId }) => {
     if (complainType === 'Exam Result') {
-    return (dispatch) => {  
-        dispatch(studentToExaminerStart());
-        axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/studentToExaminer', {
-            complainType, message, from, to, studentId, courseId
-        }).then(resp => {
-            
-            dispatch(studentToExaminerSuccess(resp.data))
-            dispatch(getExaminer())
-            
-        
-        }).catch(err => {
-            dispatch(studentToExaminerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
-    };    
+        return (dispatch) => {
+            dispatch(studentToExaminerStart());
+            axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/studentToExaminer', {
+                complainType, message, from, to, studentId, courseId
+            }).then(resp => {
+
+                dispatch(studentToExaminerSuccess(resp.data))
+                dispatch(getExaminer())
+
+
+            }).catch(err => {
+                dispatch(studentToExaminerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     } else {
-        return (dispatch) => {  
-        dispatch(studentToLecturerStart());
-        axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/studentToLecturer', {
-            complainType, message, from, to, studentId, courseId, lecturerId
-        }).then(resp => {
-            
-            dispatch(studentToLecturerSuccess(resp.data))
-            dispatch(getExaminer())
-            
-        
-        }).catch(err => {
-            dispatch(studentToLecturerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
-    };
+        return (dispatch) => {
+            dispatch(studentToLecturerStart());
+            axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/studentToLecturer', {
+                complainType, message, from, to, studentId, courseId, lecturerId
+            }).then(resp => {
+
+                dispatch(studentToLecturerSuccess(resp.data))
+                dispatch(getExaminer())
+
+
+            }).catch(err => {
+                dispatch(studentToLecturerFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     }
-    
+
 };
 
 
@@ -681,7 +687,7 @@ export const studentToLecturerStart = () => {
 export const studentToLecturerSuccess = (payload) => {
     return {
         type: actionTypes.STUDENT_TO_LECTURER_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -713,7 +719,7 @@ export const examinerToStudentStart = () => {
 export const examinerToStudentSuccess = (payload) => {
     return {
         type: actionTypes.EXAMINER_TO_STUDENT_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -732,43 +738,43 @@ export const examinerToStudentRefresh = () => {
 
 export const examinerOrLecturerToStudent = ({ comment, from, to, studentId, studentEmailId, status, role, lecturerId }) => {
     if (role === 'Examiner') {
-    return (dispatch) => {  
-        dispatch(examinerToStudentStart());
-        axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/examinerToStudent', {
+        return (dispatch) => {
+            dispatch(examinerToStudentStart());
+            axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/examinerToStudent', {
                 comment,
                 from,
                 to,
                 studentId,
                 studentEmailId,
                 status
-        }).then(resp => {
-            dispatch(examinerToStudentSuccess(resp.data))
-            dispatch(getStudentMails(role, lecturerId))
-        }).catch(err => {
-            dispatch(getStudentMails(role, lecturerId))
-            dispatch(examinerToStudentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
-    };    
+            }).then(resp => {
+                dispatch(examinerToStudentSuccess(resp.data))
+                dispatch(getStudentMails(role, lecturerId))
+            }).catch(err => {
+                dispatch(getStudentMails(role, lecturerId))
+                dispatch(examinerToStudentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     } else {
-        return (dispatch) => {  
-        dispatch(examinerToStudentStart());
-        axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/lecturerToStudent', {
+        return (dispatch) => {
+            dispatch(examinerToStudentStart());
+            axios.post('http://localhost:8000/dcs.abu.edu.ng/mail/lecturerToStudent', {
                 comment,
                 from,
                 to,
                 studentId,
                 studentEmailId,
                 status
-        }).then(resp => {
-            dispatch(examinerToStudentSuccess(resp.data))
-            dispatch(getStudentMails(role, lecturerId))
-        }).catch(err => {
-            dispatch(getStudentMails(role, lecturerId))
-            dispatch(examinerToStudentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))     
-      })
-    };
+            }).then(resp => {
+                dispatch(examinerToStudentSuccess(resp.data))
+                dispatch(getStudentMails(role, lecturerId))
+            }).catch(err => {
+                dispatch(getStudentMails(role, lecturerId))
+                dispatch(examinerToStudentFail(err.response !== undefined ? err.response.data.error : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     }
-    
+
 };
 
 
@@ -786,7 +792,7 @@ export const getCoursesStart = () => {
 export const getCoursesSuccess = (payload) => {
     return {
         type: actionTypes.GET_COURSES_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -806,22 +812,28 @@ export const getCoursesRefresh = () => {
 export const getCourses = (role) => {
     if (role === 'Student') {
         return (dispatch) => {
-        dispatch(getCoursesStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/lecturer/Record/all').then(resp => {
-            dispatch(getCoursesSuccess(resp.data))
-        }).catch(err => {
-            dispatch(getCoursesFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
-        })
-    };
+            dispatch(getCoursesStart());
+            axios.get('http://localhost:8000/dcs.abu.edu.ng/lecturer/Record/all').then(resp => {
+                setTimeout(() => {
+                    dispatch(getCoursesSuccess(resp.data))
+                }, 2000)
+
+            }).catch(err => {
+                dispatch(getCoursesFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     } else {
         return (dispatch) => {
-        dispatch(getCoursesStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/course/getAll').then(resp => {
-            dispatch(getCoursesSuccess(resp.data))
-        }).catch(err => {
-            dispatch(getCoursesFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
-        })
-    };
+            dispatch(getCoursesStart());
+            axios.get('http://localhost:8000/dcs.abu.edu.ng/course/getAll').then(resp => {
+                setTimeout(() => {
+                    dispatch(getCoursesSuccess(resp.data))
+                }, 2000)
+
+            }).catch(err => {
+                dispatch(getCoursesFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     }
 }
 
@@ -834,7 +846,7 @@ export const addCoursesStart = () => {
 export const addCoursesSuccess = (payload) => {
     return {
         type: actionTypes.ADD_COURSES_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -851,11 +863,11 @@ export const addCoursesRefresh = () => {
     };
 };
 
-export const addCourses = ({courseCode, courseTitle, creditUnit, adminId}) => {
-    
-        return (dispatch) => {
+export const addCourses = ({ courseCode, courseTitle, creditUnit, adminId }) => {
+
+    return (dispatch) => {
         dispatch(addCoursesStart());
-            axios.post('http://localhost:8000/dcs.abu.edu.ng/course/', {
+        axios.post('http://localhost:8000/dcs.abu.edu.ng/course/', {
             courseCode, courseTitle, creditUnit, adminId
         }).then(resp => {
             dispatch(addCoursesSuccess(resp.data))
@@ -876,7 +888,7 @@ export const getStudentMailsStart = () => {
 export const getStudentMailsSuccess = (payload) => {
     return {
         type: actionTypes.GET_STUDENT_MAILS_SUCCESS,
-         payload
+        payload
     }
 }
 
@@ -896,24 +908,24 @@ export const getStudentMailsRefresh = () => {
 export const getStudentMails = (role, lecturerId) => {
     if (role === 'Examiner') {
         return (dispatch) => {
-        dispatch(getStudentMailsStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/examinerInbox').then(resp => {
-            dispatch(getStudentMailsSuccess(resp.data))
-        }).catch(err => {
-            dispatch(getStudentMailsFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
-        })
-    };
+            dispatch(getStudentMailsStart());
+            axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/examinerInbox').then(resp => {
+                dispatch(getStudentMailsSuccess(resp.data))
+            }).catch(err => {
+                dispatch(getStudentMailsFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     } else {
-       return (dispatch) => {
-        dispatch(getStudentMailsStart());
-        axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/lecturerInbox/'+ lecturerId).then(resp => {
-            dispatch(getStudentMailsSuccess(resp.data))
-        }).catch(err => {
-            dispatch(getStudentMailsFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
-        })
-    }; 
+        return (dispatch) => {
+            dispatch(getStudentMailsStart());
+            axios.get('http://localhost:8000/dcs.abu.edu.ng/mail/lecturerInbox/' + lecturerId).then(resp => {
+                dispatch(getStudentMailsSuccess(resp.data))
+            }).catch(err => {
+                dispatch(getStudentMailsFail(err.response !== undefined ? err.response.data.msg : ERROR_MESSAGE.NETWORK_FAILURE))
+            })
+        };
     }
-    
+
 }
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { auth, history } from '../../store/actions'
 
@@ -59,10 +59,11 @@ class SignIn extends Component {
         }
 
     }
-    componentDidMount(){
-    const {isLoggedIn}=this.props.authState
-    if (isLoggedIn) return history.push('/');
-  }
+    componentDidMount() {
+        const token = sessionStorage.getItem('user-token')
+        if (token !== null) return this.props.history.push('/');
+
+    }
     handleShowPassword = (e) => {
         e.preventDefault();
         this.setState(prevState => ({ showPassword: !prevState.showPassword }));
@@ -75,13 +76,13 @@ class SignIn extends Component {
         const updatedControlsElement = {
             ...updatedControls[inputIdentifier]
         };
-       
+
         updatedControlsElement.value = event.target.value;
         updatedControlsElement.valid = checkValidity(updatedControlsElement.value, updatedControlsElement.validation)
         updatedControlsElement.touched = true;
         updatedControls[inputIdentifier] = updatedControlsElement;
         this.setState({ controls: updatedControls });
-        
+
     }
 
 
@@ -93,7 +94,7 @@ class SignIn extends Component {
 
     render() {
         let { handlePage } = this.props
-        let {controls}  = this.state
+        let { controls } = this.state
         const { isLoggedIn, isLoading, message } = this.props.authState
         let toggle = this.state.showPassword ? 'text' : 'password'
         let inputAdonment = {
@@ -107,7 +108,7 @@ class SignIn extends Component {
         };
         let authRedirect = null;
         if (isLoggedIn) {
-            authRedirect = <Redirect to ='/'/>
+            authRedirect = <Redirect to='/' />
         }
         let formElementArray = [];
         for (let key in this.state.controls) {
@@ -136,14 +137,14 @@ class SignIn extends Component {
                                 changed={(event) => this.inputChangedHandler(event, formElement.id)}
 
                                 key={formElement.id} />
-                            
+
                         ))}
-                        
+
                     </div>
                     <div className="item item--3">
                         <Button
                             valid={controls.user_id.valid === false ? false :
-                            controls.password.valid === false ? false : null}
+                                controls.password.valid === false ? false : null}
                             disableRipple={isLoading}
                             disableFocusRipple={isLoading}
                             disabled={isLoading}
@@ -152,29 +153,29 @@ class SignIn extends Component {
                             type='submit'
                             variant={'contained'}
                             buttonName={'SIGN IN'}
-                            
+
                         />
-                        
+
                     </div>
                     <div className="item item--4">
-                        <div><p id="forgot" onClick={()=>handlePage(2)}>Forgot password?</p></div>
+                        <div><p id="forgot" onClick={() => handlePage(2)}>Forgot password?</p></div>
                         <div><p id="quick">Quick access with</p></div>
                     </div>
                 </form>
-        
+
             </div>
-            
+
         );
     }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    authState:state.isAuthenticated,
-    
-    /***sign up module global state***/
-    
-  }
+    return {
+        authState: state.isAuthenticated,
+
+        /***sign up module global state***/
+
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
